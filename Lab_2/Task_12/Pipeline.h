@@ -1,25 +1,7 @@
 #pragma once
-/*
-
-    Copyright 2010 Etay Meiri
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #include "math_3d.h"
 
-class Pipeline
+class Pipeline // класс, инкапсулирующий трасформации объекта 
 {
 public:
     Pipeline()
@@ -67,17 +49,18 @@ private:
     void InitTranslationTransform(Matrix4f& m) const;
     void InitPerspectiveProj(Matrix4f& m) const;
 
-    Vector3f m_scale;
-    Vector3f m_worldPos;
-    Vector3f m_rotateInfo;
+    Vector3f m_scale; // вектор  масштаба
+    Vector3f m_worldPos; // вектор положени€ на экране
+    Vector3f m_rotateInfo; // вектор поворота
 
-    struct {
-        float FOV;
-        float Width;
-        float Height;
-        float zNear;
-        float zFar;
+    struct
+    {
+        float FOV; // угол обзора
+        float Width; // ширина окна
+        float Height; // высота окна
+        float zNear; // ближн€€ z плоскость (все что ближе - обрезаетс€)
+        float zFar; // дальн€€ z плоскость (все что дальше - обрезаетс€)
     } m_persProj;
 
-    Matrix4f m_transformation;
+    Matrix4f m_transformation; // конечна€ матрица трансформации
 };
