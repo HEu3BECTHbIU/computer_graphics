@@ -1,4 +1,4 @@
-#ifndef MATH_3D_H
+п»ї#ifndef MATH_3D_H
 #define	MATH_3D_H
 
 #define _USE_MATH_DEFINES
@@ -6,7 +6,7 @@
 
 #define ToRadian(x) ((x) * M_PI / 180.0f)
 #define ToDegree(x) ((x) * 180.0f / M_PI)
-struct Vector3f // вектор в прострастве
+struct Vector3f // РІРµРєС‚РѕСЂ РІ РїСЂРѕСЃС‚СЂР°СЃС‚РІРµ
 {
     float x;
     float y;
@@ -23,7 +23,7 @@ struct Vector3f // вектор в прострастве
         z = _z;
     }
 };
-class Matrix4f // матрица 4х4
+class Matrix4f // РјР°С‚СЂРёС†Р° 4С…4
 {
 public:
     float m[4][4];
@@ -31,14 +31,14 @@ public:
     Matrix4f()
     {
     }
-    inline void InitIdentity() // инициализация (единичная матрица)
+    inline void InitIdentity() // РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ (РµРґРёРЅРёС‡РЅР°СЏ РјР°С‚СЂРёС†Р°)
     {
         m[0][0] = 1.0f; m[0][1] = 0.0f; m[0][2] = 0.0f; m[0][3] = 0.0f;
         m[1][0] = 0.0f; m[1][1] = 1.0f; m[1][2] = 0.0f; m[1][3] = 0.0f;
         m[2][0] = 0.0f; m[2][1] = 0.0f; m[2][2] = 1.0f; m[2][3] = 0.0f;
         m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f; m[3][3] = 1.0f;
     }
-    // перегрузка оператора умножения для матриц
+    // РїРµСЂРµРіСЂСѓР·РєР° РѕРїРµСЂР°С‚РѕСЂР° СѓРјРЅРѕР¶РµРЅРёСЏ РґР»СЏ РјР°С‚СЂРёС†
     inline Matrix4f operator*(const Matrix4f& Right) const
     {
         Matrix4f Ret;

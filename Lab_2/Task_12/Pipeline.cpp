@@ -1,6 +1,6 @@
-#include "pipeline.h"
+п»ї#include "pipeline.h"
 
-void Pipeline::InitScaleTransform(Matrix4f& m) const // функция инициализации матрицы изменения масштаба
+void Pipeline::InitScaleTransform(Matrix4f& m) const // С„СѓРЅРєС†РёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РјР°С‚СЂРёС†С‹ РёР·РјРµРЅРµРЅРёСЏ РјР°СЃС€С‚Р°Р±Р°
 {
     m.m[0][0] = m_scale.x; m.m[0][1] = 0.0f; m.m[0][2] = 0.0f; m.m[0][3] = 0.0f;
     m.m[1][0] = 0.0f; m.m[1][1] = m_scale.y; m.m[1][2] = 0.0f; m.m[1][3] = 0.0f;
@@ -8,24 +8,24 @@ void Pipeline::InitScaleTransform(Matrix4f& m) const // функция инициализации ма
     m.m[3][0] = 0.0f; m.m[3][1] = 0.0f; m.m[3][2] = 0.0f; m.m[3][3] = 1.0f;
 }
 
-void Pipeline::InitRotateTransform(Matrix4f& m) const // функция инициализации матрицы поворота вокруг оси
+void Pipeline::InitRotateTransform(Matrix4f& m) const // С„СѓРЅРєС†РёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РјР°С‚СЂРёС†С‹ РїРѕРІРѕСЂРѕС‚Р° РІРѕРєСЂСѓРі РѕСЃРё
 {
     Matrix4f rx, ry, rz;
 
     const float x = ToRadian(m_rotateInfo.x);
     const float y = ToRadian(m_rotateInfo.y);
     const float z = ToRadian(m_rotateInfo.z);
-    // вращение вокруг оси x
+    // РІСЂР°С‰РµРЅРёРµ РІРѕРєСЂСѓРі РѕСЃРё x
     rx.m[0][0] = 1.0f; rx.m[0][1] = 0.0f; rx.m[0][2] = 0.0f; rx.m[0][3] = 0.0f;
     rx.m[1][0] = 0.0f; rx.m[1][1] = cosf(x); rx.m[1][2] = -sinf(x); rx.m[1][3] = 0.0f;
     rx.m[2][0] = 0.0f; rx.m[2][1] = sinf(x); rx.m[2][2] = cosf(x); rx.m[2][3] = 0.0f;
     rx.m[3][0] = 0.0f; rx.m[3][1] = 0.0f; rx.m[3][2] = 0.0f; rx.m[3][3] = 1.0f;
-    // вращение вокруг оси y
+    // РІСЂР°С‰РµРЅРёРµ РІРѕРєСЂСѓРі РѕСЃРё y
     ry.m[0][0] = cosf(y); ry.m[0][1] = 0.0f; ry.m[0][2] = -sinf(y); ry.m[0][3] = 0.0f;
     ry.m[1][0] = 0.0f; ry.m[1][1] = 1.0f; ry.m[1][2] = 0.0f; ry.m[1][3] = 0.0f;
     ry.m[2][0] = sinf(y); ry.m[2][1] = 0.0f; ry.m[2][2] = cosf(y); ry.m[2][3] = 0.0f;
     ry.m[3][0] = 0.0f; ry.m[3][1] = 0.0f; ry.m[3][2] = 0.0f; ry.m[3][3] = 1.0f;
-    // вращение вокруг оси z
+    // РІСЂР°С‰РµРЅРёРµ РІРѕРєСЂСѓРі РѕСЃРё z
     rz.m[0][0] = cosf(z); rz.m[0][1] = -sinf(z); rz.m[0][2] = 0.0f; rz.m[0][3] = 0.0f;
     rz.m[1][0] = sinf(z); rz.m[1][1] = cosf(z); rz.m[1][2] = 0.0f; rz.m[1][3] = 0.0f;
     rz.m[2][0] = 0.0f; rz.m[2][1] = 0.0f; rz.m[2][2] = 1.0f; rz.m[2][3] = 0.0f;
@@ -34,7 +34,7 @@ void Pipeline::InitRotateTransform(Matrix4f& m) const // функция инициализации м
     m = rz * ry * rx;
 }
 
-void Pipeline::InitTranslationTransform(Matrix4f& m) const // функция инициализации матрицы изменения положения
+void Pipeline::InitTranslationTransform(Matrix4f& m) const // С„СѓРЅРєС†РёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РјР°С‚СЂРёС†С‹ РёР·РјРµРЅРµРЅРёСЏ РїРѕР»РѕР¶РµРЅРёСЏ
 {
     m.m[0][0] = 1.0f; m.m[0][1] = 0.0f; m.m[0][2] = 0.0f; m.m[0][3] = m_worldPos.x;
     m.m[1][0] = 0.0f; m.m[1][1] = 1.0f; m.m[1][2] = 0.0f; m.m[1][3] = m_worldPos.y;
@@ -43,7 +43,7 @@ void Pipeline::InitTranslationTransform(Matrix4f& m) const // функция инициализа
 }
 
 void Pipeline::InitPerspectiveProj(Matrix4f& m) const
-{   //функция  инициализации матрицы проекции перспективы
+{   //С„СѓРЅРєС†РёСЏ  РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РјР°С‚СЂРёС†С‹ РїСЂРѕРµРєС†РёРё РїРµСЂСЃРїРµРєС‚РёРІС‹
     const float ar = m_persProj.Width / m_persProj.Height;
     const float zNear = m_persProj.zNear;
     const float zFar = m_persProj.zFar;
@@ -57,7 +57,7 @@ void Pipeline::InitPerspectiveProj(Matrix4f& m) const
 }
 
 
-const Matrix4f* Pipeline::GetTrans() // функция получения единой матрицы трансформации
+const Matrix4f* Pipeline::GetTrans() // С„СѓРЅРєС†РёСЏ РїРѕР»СѓС‡РµРЅРёСЏ РµРґРёРЅРѕР№ РјР°С‚СЂРёС†С‹ С‚СЂР°РЅСЃС„РѕСЂРјР°С†РёРё
 {
     Matrix4f ScaleTrans, RotateTrans, TranslationTrans, PersProjTrans;
 

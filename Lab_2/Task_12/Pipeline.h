@@ -1,7 +1,7 @@
-#pragma once
+п»ї#pragma once
 #include "math_3d.h"
 
-class Pipeline // класс, инкапсулирующий трасформации объекта 
+class Pipeline // РєР»Р°СЃСЃ, РёРЅРєР°РїСЃСѓР»РёСЂСѓСЋС‰РёР№ С‚СЂР°СЃС„РѕСЂРјР°С†РёРё РѕР±СЉРµРєС‚Р° 
 {
 public:
     Pipeline()
@@ -49,18 +49,18 @@ private:
     void InitTranslationTransform(Matrix4f& m) const;
     void InitPerspectiveProj(Matrix4f& m) const;
 
-    Vector3f m_scale; // вектор  масштаба
-    Vector3f m_worldPos; // вектор положения на экране
-    Vector3f m_rotateInfo; // вектор поворота
+    Vector3f m_scale; // РІРµРєС‚РѕСЂ  РјР°СЃС€С‚Р°Р±Р°
+    Vector3f m_worldPos; // РІРµРєС‚РѕСЂ РїРѕР»РѕР¶РµРЅРёСЏ РЅР° СЌРєСЂР°РЅРµ
+    Vector3f m_rotateInfo; // РІРµРєС‚РѕСЂ РїРѕРІРѕСЂРѕС‚Р°
 
     struct
     {
-        float FOV; // угол обзора
-        float Width; // ширина окна
-        float Height; // высота окна
-        float zNear; // ближняя z плоскость (все что ближе - обрезается)
-        float zFar; // дальняя z плоскость (все что дальше - обрезается)
+        float FOV; // СѓРіРѕР» РѕР±Р·РѕСЂР°
+        float Width; // С€РёСЂРёРЅР° РѕРєРЅР°
+        float Height; // РІС‹СЃРѕС‚Р° РѕРєРЅР°
+        float zNear; // Р±Р»РёР¶РЅСЏСЏ z РїР»РѕСЃРєРѕСЃС‚СЊ (РІСЃРµ С‡С‚Рѕ Р±Р»РёР¶Рµ - РѕР±СЂРµР·Р°РµС‚СЃСЏ)
+        float zFar; // РґР°Р»СЊРЅСЏСЏ z РїР»РѕСЃРєРѕСЃС‚СЊ (РІСЃРµ С‡С‚Рѕ РґР°Р»СЊС€Рµ - РѕР±СЂРµР·Р°РµС‚СЃСЏ)
     } m_persProj;
 
-    Matrix4f m_transformation; // конечная матрица трансформации
+    Matrix4f m_transformation; // РєРѕРЅРµС‡РЅР°СЏ РјР°С‚СЂРёС†Р° С‚СЂР°РЅСЃС„РѕСЂРјР°С†РёРё
 };
