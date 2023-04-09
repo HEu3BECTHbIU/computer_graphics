@@ -1,4 +1,4 @@
-#ifndef MATH_3D_H
+﻿#ifndef MATH_3D_H
 #define	MATH_3D_H
 
 #define _USE_MATH_DEFINES
@@ -25,16 +25,16 @@ struct Vector3f
         z = _z;
     }
 
-    Vector3f Cross(const Vector3f& v) const
+    Vector3f Cross(const Vector3f& v) const // векторное произведение векторов 
     {
         const float _x = y * v.z - z * v.y;
         const float _y = z * v.x - x * v.z;
         const float _z = x * v.y - y * v.x;
 
-        return Vector3f(_x, _y, _z);
+        return Vector3f(_x, _y, _z); // результат - вектор, перпендикулярный двум другим
     }
 
-    Vector3f& Normalize()
+    Vector3f& Normalize() // нормализация вектора (единичная длина)
     {
         const float Length = sqrtf(x * x + y * y + z * z);
 
@@ -123,7 +123,7 @@ public:
         m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f; m[3][3] = 1.0f;
     }
     void InitCameraTransform(const Vector3f& Target, const Vector3f& Up)
-    {
+    { // функция инициализации матрицы трасформации при изменении камеры
         Vector3f N = Target;
         N.Normalize();
         Vector3f U = Up;

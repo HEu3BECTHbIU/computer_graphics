@@ -1,4 +1,4 @@
-#ifndef PIPELINE_H
+﻿#ifndef PIPELINE_H
 #define	PIPELINE_H
 
 #include "math_3d.h"
@@ -60,7 +60,7 @@ public:
         CameraTranslationTrans.InitTranslationTransform(-m_camera.Pos.x, -m_camera.Pos.y, -m_camera.Pos.z);
         CameraRotateTrans.InitCameraTransform(m_camera.Target, m_camera.Up);
         PersProjTrans.InitPersProjTransform(m_persProj.FOV, m_persProj.Width, m_persProj.Height, m_persProj.zNear, m_persProj.zFar);
-
+        // доп преобразования - матрицы поворота камеры и положения камеры
         m_transformation = PersProjTrans * CameraRotateTrans * CameraTranslationTrans * TranslationTrans * RotateTrans * ScaleTrans;
         return &m_transformation;
     }
@@ -79,7 +79,7 @@ private:
         float zFar;
     } m_persProj;
 
-    struct
+    struct // структура, описывающая камеру
     {
         Vector3f Pos;
         Vector3f Target;
@@ -89,4 +89,4 @@ private:
     Matrix4f m_transformation;
 };
 
-#endif	/* PIPELINE_H */#pragma once
+#endif	/* PIPELINE_H */

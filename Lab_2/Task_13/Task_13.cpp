@@ -68,20 +68,13 @@ void RenderScene()
     Pipeline p;
     p.Rotate(0.0f, (Scale), 0.0f);
     //p.WorldPos(sinf(Scale), sinf(Scale2), 5.0f);
-    Vector3f CameraPos(2.0f, 1.0f, -5.0f);
-    Vector3f CameraTarget(-0.75f, -0.25f, 1.0f);
-    Vector3f CameraUp(0.0f, 1.0f, 0.0f);
-    p.SetCamera(CameraPos, CameraTarget, CameraUp);
-    p.SetPerspectiveProj(40.0f, 1024, 728, 1.0f, 100.0f);
+    Vector3f CameraPos(2.0f, 1.0f, -5.0f); // положение камеры в пространстве
+    Vector3f CameraTarget(sinf(Scale2), -0.25f, 1.0f); // область захвата камеры (вектор, вдоль которого смотрит камера)
+    Vector3f CameraUp(0.0f, 1.0f, 0.0f); // вектор вверх 
+    p.SetCamera(CameraPos, CameraTarget, CameraUp); // установка преобразованной камеры
+    p.SetPerspectiveProj(60.0f, 1024, 728, 1.0f, 100.0f);
     glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, (const GLfloat*)p.GetTrans());
-   // static int count = 0;
-    //if (count == 10)
-    //{
-//CameraUp.Print();
-//std::cout << "\n";
-//count++;
-   // }
-    
+
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, Vbuf);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -168,7 +161,7 @@ int main(int argc, char** argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(1024, 728);
     glutInitWindowPosition(100, 100);
-    glutCreateWindow("Shaiders");
+    glutCreateWindow("Task_13");
 
     InitializeGlutCallbacks();
 
