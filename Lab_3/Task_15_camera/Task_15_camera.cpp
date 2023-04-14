@@ -194,8 +194,8 @@ int main(int argc, char** argv)
     glutInitWindowSize(1920, 1080);
     glutInitWindowPosition(0, 0);
     glutCreateWindow("Task 15");
-    glutGameModeString("1920x1080:32");
-    glutEnterGameMode();
+    glutGameModeString("1920x1080:32"); // разрешение и глубина цвета для игрового режима
+    glutEnterGameMode(); // вход в игровой режим
     InitializeGlutCallbacks();
     GLenum res = glewInit();
     if (res != GLEW_OK)
@@ -203,7 +203,7 @@ int main(int argc, char** argv)
         fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
         return 1;
     }
-    cam = new Camera(1536, 864);
+    cam = new Camera(1536, 864); // инициализация камеры
     CreateVertexBuffer();
     CompileShaders();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0);

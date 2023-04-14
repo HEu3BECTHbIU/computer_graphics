@@ -1,18 +1,18 @@
-#include "pipeline.h"
+п»ї#include "pipeline.h"
 
 
-const Matrix4f* Pipeline::GetTrans() // функция получения матрицы трансформации
+const Matrix4f* Pipeline::GetTrans() // С„СѓРЅРєС†РёСЏ РїРѕР»СѓС‡РµРЅРёСЏ РјР°С‚СЂРёС†С‹ С‚СЂР°РЅСЃС„РѕСЂРјР°С†РёРё
 {
     Matrix4f ScaleTrans, RotateTrans, TranslationTrans, CameraTranslationTrans, CameraRotateTrans, PersProjTrans;
 
-    ScaleTrans.InitScaleTransform(m_scale.x, m_scale.y, m_scale.z); // матрица изменения размера
-    RotateTrans.InitRotateTransform(m_rotateInfo.x, m_rotateInfo.y, m_rotateInfo.z); // матрица поворота
-    TranslationTrans.InitTranslationTransform(m_worldPos.x, m_worldPos.y, m_worldPos.z); // матрица перемещения объекта
-    // матрица перемещения камеры (перемещение объекта в другую сторону)
+    ScaleTrans.InitScaleTransform(m_scale.x, m_scale.y, m_scale.z); // РјР°С‚СЂРёС†Р° РёР·РјРµРЅРµРЅРёСЏ СЂР°Р·РјРµСЂР°
+    RotateTrans.InitRotateTransform(m_rotateInfo.x, m_rotateInfo.y, m_rotateInfo.z); // РјР°С‚СЂРёС†Р° РїРѕРІРѕСЂРѕС‚Р°
+    TranslationTrans.InitTranslationTransform(m_worldPos.x, m_worldPos.y, m_worldPos.z); // РјР°С‚СЂРёС†Р° РїРµСЂРµРјРµС‰РµРЅРёСЏ РѕР±СЉРµРєС‚Р°
+    // РјР°С‚СЂРёС†Р° РїРµСЂРµРјРµС‰РµРЅРёСЏ РєР°РјРµСЂС‹ (РїРµСЂРµРјРµС‰РµРЅРёРµ РѕР±СЉРµРєС‚Р° РІ РґСЂСѓРіСѓСЋ СЃС‚РѕСЂРѕРЅСѓ)
     CameraTranslationTrans.InitTranslationTransform(-m_camera.Pos.x, -m_camera.Pos.y, -m_camera.Pos.z);
 
-    CameraRotateTrans.InitCameraTransform(m_camera.Target, m_camera.Up); // матрица поворота камеры
-    // матрица проекции объекта
+    CameraRotateTrans.InitCameraTransform(m_camera.Target, m_camera.Up); // РјР°С‚СЂРёС†Р° РїРѕРІРѕСЂРѕС‚Р° РєР°РјРµСЂС‹
+    // РјР°С‚СЂРёС†Р° РїСЂРѕРµРєС†РёРё РѕР±СЉРµРєС‚Р°
     PersProjTrans.InitPersProjTransform(m_persProj.FOV, m_persProj.Width, m_persProj.Height, m_persProj.zNear, m_persProj.zFar);
     m_transformation = PersProjTrans * CameraRotateTrans * CameraTranslationTrans * TranslationTrans * RotateTrans * ScaleTrans;
     return &m_transformation;

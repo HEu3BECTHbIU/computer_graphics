@@ -1,4 +1,4 @@
-#ifndef MATH_3D_H
+﻿#ifndef MATH_3D_H
 #define	MATH_3D_H
 #define _USE_MATH_DEFINES
 #include <stdio.h>

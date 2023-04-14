@@ -1,12 +1,12 @@
-#ifndef PIPELINE_H
+п»ї#ifndef PIPELINE_H
 #define	PIPELINE_H
 
 #include "math_3d.h"
 
-class Pipeline // // класс, инкапсулирующий трасформации объекта
+class Pipeline // // РєР»Р°СЃСЃ, РёРЅРєР°РїСЃСѓР»РёСЂСѓСЋС‰РёР№ С‚СЂР°СЃС„РѕСЂРјР°С†РёРё РѕР±СЉРµРєС‚Р°
 {
 public:
-    Pipeline() // конструктор по умолчанию
+    Pipeline() // РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
     {
         m_scale = Vector3f(1.0f, 1.0f, 1.0f);
         m_worldPos = Vector3f(0.0f, 0.0f, 0.0f);
@@ -71,7 +71,7 @@ private:
         Vector3f Pos;
         Vector3f Target;
         Vector3f Up;
-    } m_camera; // структура, описывающая положение камеры
+    } m_camera; // СЃС‚СЂСѓРєС‚СѓСЂР°, РѕРїРёСЃС‹РІР°СЋС‰Р°СЏ РїРѕР»РѕР¶РµРЅРёРµ РєР°РјРµСЂС‹
 
     Matrix4f m_transformation;
 };

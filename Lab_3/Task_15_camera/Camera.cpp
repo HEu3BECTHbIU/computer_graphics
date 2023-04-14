@@ -1,11 +1,11 @@
-#include <GL/freeglut.h>
+п»ї#include <GL/freeglut.h>
 
 #include "camera.h"
 
 const static float StepScale = 0.1f;
 const static int MARGIN = 10;
 
-Camera::Camera(int WindowWidth, int WindowHeight) // инициализация камеры по умолчанию
+Camera::Camera(int WindowWidth, int WindowHeight) // РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєР°РјРµСЂС‹ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 {
     m_windowWidth = WindowWidth;
     m_windowHeight = WindowHeight;
@@ -17,7 +17,7 @@ Camera::Camera(int WindowWidth, int WindowHeight) // инициализация камеры по умо
     Init();
 }
 
-// инициализация камеры с параметрами
+// РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєР°РјРµСЂС‹ СЃ РїР°СЂР°РјРµС‚СЂР°РјРё
 Camera::Camera(int WindowWidth, int WindowHeight, const Vector3f& Pos, const Vector3f& Target, const Vector3f& Up)
 {
     m_windowWidth = WindowWidth;
@@ -32,7 +32,7 @@ Camera::Camera(int WindowWidth, int WindowHeight, const Vector3f& Pos, const Vec
 
     Init();
 }
-// инициализация внутренних параметров камеры (вычисление горизонтального угла + вертикального)
+// РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РІРЅСѓС‚СЂРµРЅРЅРёС… РїР°СЂР°РјРµС‚СЂРѕРІ РєР°РјРµСЂС‹ (РІС‹С‡РёСЃР»РµРЅРёРµ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕРіРѕ СѓРіР»Р° + РІРµСЂС‚РёРєР°Р»СЊРЅРѕРіРѕ)
 void Camera::Init()
 {
     Vector3f HTarget(m_target.x, 0.0, m_target.z);
@@ -62,53 +62,53 @@ void Camera::Init()
 
     m_AngleV = -ToDegree(asin(m_target.y));
 
-    m_OnUpperEdge = false; // обнуление флагов нахождения на границе
+    m_OnUpperEdge = false; // РѕР±РЅСѓР»РµРЅРёРµ С„Р»Р°РіРѕРІ РЅР°С…РѕР¶РґРµРЅРёСЏ РЅР° РіСЂР°РЅРёС†Рµ
     m_OnLowerEdge = false;
     m_OnLeftEdge = false;
     m_OnRightEdge = false;
     m_mousePos.x = m_windowWidth / 2;
     m_mousePos.y = m_windowHeight / 2;
     //printf("%i, %i", m_mousePos.x, m_mousePos.y);
-    glutWarpPointer(m_mousePos.x, m_mousePos.y); // перестановка курсора в центр экрана
+    glutWarpPointer(m_mousePos.x, m_mousePos.y); // РїРµСЂРµСЃС‚Р°РЅРѕРІРєР° РєСѓСЂСЃРѕСЂР° РІ С†РµРЅС‚СЂ СЌРєСЂР°РЅР°
 }
 
 
-bool Camera::OnKeyboard(int Key) // функция, изменяющая положение камеры в зависимости от нажатой клавиши
+bool Camera::OnKeyboard(int Key) // С„СѓРЅРєС†РёСЏ, РёР·РјРµРЅСЏСЋС‰Р°СЏ РїРѕР»РѕР¶РµРЅРёРµ РєР°РјРµСЂС‹ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РЅР°Р¶Р°С‚РѕР№ РєР»Р°РІРёС€Рё
 {
     bool Ret = false;
 
     switch (Key)
     {
-    case GLUT_KEY_UP: // если стрелка вверх
+    case GLUT_KEY_UP: // РµСЃР»Рё СЃС‚СЂРµР»РєР° РІРІРµСЂС…
     {
-        m_pos += (m_target * StepScale); // прибавляем к позиции вектор направления (приближаемся)
+        m_pos += (m_target * StepScale); // РїСЂРёР±Р°РІР»СЏРµРј Рє РїРѕР·РёС†РёРё РІРµРєС‚РѕСЂ РЅР°РїСЂР°РІР»РµРЅРёСЏ (РїСЂРёР±Р»РёР¶Р°РµРјСЃСЏ)
         Ret = true;
     }
     break;
 
-    case GLUT_KEY_DOWN: // если стрелка вниз
+    case GLUT_KEY_DOWN: // РµСЃР»Рё СЃС‚СЂРµР»РєР° РІРЅРёР·
     {
-        m_pos -= (m_target * StepScale); // отнимаем от позиции вектор направления
+        m_pos -= (m_target * StepScale); // РѕС‚РЅРёРјР°РµРј РѕС‚ РїРѕР·РёС†РёРё РІРµРєС‚РѕСЂ РЅР°РїСЂР°РІР»РµРЅРёСЏ
         Ret = true;
     }
     break;
 
-    case GLUT_KEY_LEFT: // если стрелка влево
+    case GLUT_KEY_LEFT: // РµСЃР»Рё СЃС‚СЂРµР»РєР° РІР»РµРІРѕ
     {
-        Vector3f Left = m_target.Cross(m_up); // вычисляем вектор налево
-        Left.Normalize(); // нормализуем
+        Vector3f Left = m_target.Cross(m_up); // РІС‹С‡РёСЃР»СЏРµРј РІРµРєС‚РѕСЂ РЅР°Р»РµРІРѕ
+        Left.Normalize(); // РЅРѕСЂРјР°Р»РёР·СѓРµРј
         Left *= StepScale;
-        m_pos += Left; // прибавляем к позиции вектор налево (перемещаем камеру вдоль вектора)
+        m_pos += Left; // РїСЂРёР±Р°РІР»СЏРµРј Рє РїРѕР·РёС†РёРё РІРµРєС‚РѕСЂ РЅР°Р»РµРІРѕ (РїРµСЂРµРјРµС‰Р°РµРј РєР°РјРµСЂСѓ РІРґРѕР»СЊ РІРµРєС‚РѕСЂР°)
         Ret = true;
     }
     break;
 
-    case GLUT_KEY_RIGHT: // если стрелка вправо
+    case GLUT_KEY_RIGHT: // РµСЃР»Рё СЃС‚СЂРµР»РєР° РІРїСЂР°РІРѕ
     {
-        Vector3f Right = m_up.Cross(m_target); // вычисляем вектор направо 
+        Vector3f Right = m_up.Cross(m_target); // РІС‹С‡РёСЃР»СЏРµРј РІРµРєС‚РѕСЂ РЅР°РїСЂР°РІРѕ 
         Right.Normalize();
         Right *= StepScale;
-        m_pos += Right; // прибавляем к позиции вектор направо (перемещаем камеру вдоль вектора)
+        m_pos += Right; // РїСЂРёР±Р°РІР»СЏРµРј Рє РїРѕР·РёС†РёРё РІРµРєС‚РѕСЂ РЅР°РїСЂР°РІРѕ (РїРµСЂРµРјРµС‰Р°РµРј РєР°РјРµСЂСѓ РІРґРѕР»СЊ РІРµРєС‚РѕСЂР°)
         Ret = true;
     }
     break;
@@ -116,17 +116,17 @@ bool Camera::OnKeyboard(int Key) // функция, изменяющая положение камеры в завис
     return Ret;
 }
 
-void Camera::OnMouse(int x, int y) // при перемещении мыши
+void Camera::OnMouse(int x, int y) // РїСЂРё РїРµСЂРµРјРµС‰РµРЅРёРё РјС‹С€Рё
 {
-    const int DeltaX = x - m_mousePos.x; // разница между новыми и старыми координатами
+    const int DeltaX = x - m_mousePos.x; // СЂР°Р·РЅРёС†Р° РјРµР¶РґСѓ РЅРѕРІС‹РјРё Рё СЃС‚Р°СЂС‹РјРё РєРѕРѕСЂРґРёРЅР°С‚Р°РјРё
     const int DeltaY = y - m_mousePos.y;
 
     m_mousePos.x = x;
     m_mousePos.y = y;
 
-    m_AngleH += (float)DeltaX / 20.0f; // изменение горизонтального и вертикального углов
+    m_AngleH += (float)DeltaX / 20.0f; // РёР·РјРµРЅРµРЅРёРµ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕРіРѕ Рё РІРµСЂС‚РёРєР°Р»СЊРЅРѕРіРѕ СѓРіР»РѕРІ
     m_AngleV += (float)DeltaY / 20.0f;
-    // если на границах
+    // РµСЃР»Рё РЅР° РіСЂР°РЅРёС†Р°С…
     if (DeltaX == 0) {
         if (x <= MARGIN) {
                // m_AngleH -= 1.0f;
@@ -155,11 +155,11 @@ void Camera::OnMouse(int x, int y) // при перемещении мыши
         m_OnLowerEdge = false;
     }
 
-    Update(); // вносим обновления
+    Update(); // РІРЅРѕСЃРёРј РѕР±РЅРѕРІР»РµРЅРёСЏ
 }
 
 
-void Camera::OnRender() // функция, вращающая камеру автоматически (изменяет соответствующий угол)
+void Camera::OnRender() // С„СѓРЅРєС†РёСЏ, РІСЂР°С‰Р°СЋС‰Р°СЏ РєР°РјРµСЂСѓ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё (РёР·РјРµРЅСЏРµС‚ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ СѓРіРѕР»)
 {
     bool ShouldUpdate = false;
 
@@ -196,21 +196,21 @@ void Camera::OnRender() // функция, вращающая камеру автоматически (изменяет соо
     }
 }
 
-void Camera::Update() // обновление векторов камеры
+void Camera::Update() // РѕР±РЅРѕРІР»РµРЅРёРµ РІРµРєС‚РѕСЂРѕРІ РєР°РјРµСЂС‹
 {
     const Vector3f Vaxis(0.0f, 1.0f, 0.0f);
 
-    // вращает вектор view на горизонтальный угол вокруг вертикальной оси
+    // РІСЂР°С‰Р°РµС‚ РІРµРєС‚РѕСЂ view РЅР° РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅС‹Р№ СѓРіРѕР» РІРѕРєСЂСѓРі РІРµСЂС‚РёРєР°Р»СЊРЅРѕР№ РѕСЃРё
     Vector3f View(1.0f, 0.0f, 0.0f);
     View.Rotate(m_AngleH, Vaxis);
     View.Normalize();
 
-    // вращает вектор view на вертикальный угол вокруг горизонтальной оси
+    // РІСЂР°С‰Р°РµС‚ РІРµРєС‚РѕСЂ view РЅР° РІРµСЂС‚РёРєР°Р»СЊРЅС‹Р№ СѓРіРѕР» РІРѕРєСЂСѓРі РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕР№ РѕСЃРё
     Vector3f Haxis = Vaxis.Cross(View);
     Haxis.Normalize();
     View.Rotate(m_AngleV, Haxis);
 
-    m_target = View; // обновление векторов камеры 
+    m_target = View; // РѕР±РЅРѕРІР»РµРЅРёРµ РІРµРєС‚РѕСЂРѕРІ РєР°РјРµСЂС‹ 
     m_target.Normalize();
 
     m_up = m_target.Cross(Haxis);
