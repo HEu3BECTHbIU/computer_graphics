@@ -1,12 +1,8 @@
-﻿#ifndef TEXHNIQUE_H
-#define TEXHNIQUE_H
-
+﻿#pragma once
 #include <GL/glew.h>
 #include <list>
 
-#define INVALID_UNIFORM_LOCATION 0xFFFFFFFF
-
-class Technique
+class Technique // инкапсуляция добавления и компиляции шейдеров
 {
 public:
     Technique();
@@ -20,9 +16,7 @@ protected:
     GLint GetUniformLocation(const char* pUniformName);
 
 private:
-    GLuint m_shaderProg;
-    typedef std::list<GLuint> ShaderObjList;
+    GLuint m_shaderProg; // шейдерная программа
+    typedef std::list<GLuint> ShaderObjList; // лист шейдерных объектов
     ShaderObjList m_shaderObjList;
 };
-
-#endif /* TEXHNIQUE_H */

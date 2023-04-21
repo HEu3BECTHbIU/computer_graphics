@@ -7,54 +7,70 @@
 
 static ICallbacks* s_pCallbacks = NULL;
 
-static void SpecialKeyboardCB(int Key, int x, int y) {
+static void SpecialKeyboardCB(int Key, int x, int y)
+{
     s_pCallbacks->SpecialKeyboardCB(Key, x, y);
 }
 
-static void KeyboardCB(unsigned char Key, int x, int y) {
+static void KeyboardCB(unsigned char Key, int x, int y)
+{
     s_pCallbacks->KeyboardCB(Key, x, y);
 }
 
-static void PassiveMouseCB(int x, int y) {
+static void PassiveMouseCB(int x, int y)
+{
     s_pCallbacks->PassiveMouseCB(x, y);
 }
 
-static void RenderSceneCB() {
+static void RenderSceneCB()
+{
     s_pCallbacks->RenderSceneCB();
 }
 
-static void IdleCB() {
+static void IdleCB()
+{
     s_pCallbacks->IdleCB();
 }
 
-static void InitCallbacks() {
-    glutDisplayFunc(RenderSceneCB);
-    glutIdleFunc(IdleCB);
-    glutSpecialFunc(SpecialKeyboardCB);
-    glutPassiveMotionFunc(PassiveMouseCB);
-    glutKeyboardFunc(KeyboardCB);
+static void InitCallbacks() // инициализация функций обратного вызова 
+{
+    glutDisplayFunc(RenderSceneCB); // установка RenderScene как функции обратного вызова
+    glutIdleFunc(IdleCB);// теперь RenderScene будет вызываться постоянно, а не
+    // только при необходимости перерисовки (изменение размера, масштаба окна)
+    glutSpecialFunc(SpecialKeyboardCB); // регистрация функции в качестве спец. функции 
+    glutPassiveMotionFunc(PassiveMouseCB); // регистрация функции пассивного действия
+    glutKeyboardFunc(KeyboardCB); // регистрация спец. функции нажатия клавиш
+    ///if (isFullScreen)
+    //{
+//glutDestroyWindow(1); // разрушение окна (небоходимо для работы gamemode)
+   // }
 }
 
-void GLUTBackendInit(int argc, char** argv) {
+void GLUTBackendInit(int argc, char** argv) // инициализация glut
+{
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 }
-
-bool GLUTBackendCreateWindow(unsigned int Width, unsigned int Height, unsigned int bpp, bool isFullScreen, const char* pTitle) {
-    if (isFullScreen) {
+// инициализация окна
+bool GLUTBackendCreateWindow(unsigned int Width, unsigned int Height, unsigned int bpp, bool isFullScreen, const char* pTitle)
+{
+    if (isFullScreen) // если полный экран, то игровой режим
+    {
         char ModeString[64] = { 0 };
         snprintf(ModeString, sizeof(ModeString), "%dx%d@%d", Width, Height, bpp);
         glutGameModeString(ModeString);
         glutEnterGameMode();
     }
-    else {
+    else  // иначе просто окно
+    {
         glutInitWindowSize(Width, Height);
         glutCreateWindow(pTitle);
     }
-
+    // инициализация glew
     GLenum res = glewInit();
-    if (res != GLEW_OK) {
+    if (res != GLEW_OK)
+    {
         fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
         return false;
     }
@@ -62,22 +78,20 @@ bool GLUTBackendCreateWindow(unsigned int Width, unsigned int Height, unsigned i
     return true;
 }
 
-void GLUTBackendRun(ICallbacks* pCallbacks) {
-    if (!pCallbacks) {
+void GLUTBackendRun(ICallbacks* pCallbacks) // функция, запускающая инициализацию
+{
+    if (!pCallbacks) // если обратных вызовов не зарегистрировано
+    {
         fprintf(stderr, "%s : callbacks not specified!\n", __FUNCTION__);
         return;
     }
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-   // glFrontFace(GL_CW);
-   // glCullFace(GL_BACK);
-   // glEnable(GL_CULL_FACE);
-   
-    glFrontFace(GL_CW); // обход передних граней - против часовой
-    // glCullFace(GL_FRONT);
-    glCullFace(GL_BACK); //не отрисовывать невидимые задние грани
-    glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE); // включаем отсечение нелицевых граней
+    glFrontFace(GL_CW); // обход лицевых граней - пj часовой
+    glCullFace(GL_BACK); //не отрисовывать нелицевые грани грани
+
     s_pCallbacks = pCallbacks;
     InitCallbacks();
-    glutMainLoop();
+    glutMainLoop(); // передача управления циклу glut
 }

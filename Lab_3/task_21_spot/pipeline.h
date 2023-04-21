@@ -1,12 +1,11 @@
-﻿#ifndef PIPELINE_H
-#define	PIPELINE_H
+﻿#pragma once
 
 #include "math_3d.h"
 
-class Pipeline
+class Pipeline // // класс, инкапсулирующий трасформации объекта
 {
 public:
-    Pipeline()
+    Pipeline() // конструктор по умолчанию
     {
         m_scale = Vector3f(1.0f, 1.0f, 1.0f);
         m_worldPos = Vector3f(0.0f, 0.0f, 0.0f);
@@ -50,9 +49,7 @@ public:
         m_camera.Up = Up;
     }
 
-
-    const Matrix4f& GetWVPTrans();
-
+    const Matrix4f& GetTrans();
     const Matrix4f& GetWorldTrans();
 
 
@@ -61,7 +58,8 @@ private:
     Vector3f m_worldPos;
     Vector3f m_rotateInfo;
 
-    struct {
+    struct
+    {
         float FOV;
         float Width;
         float Height;
@@ -69,15 +67,13 @@ private:
         float zFar;
     } m_persProj;
 
-    struct {
+    struct
+    {
         Vector3f Pos;
         Vector3f Target;
         Vector3f Up;
-    } m_camera;
+    } m_camera; // структура, описывающая положение камеры
 
-    Matrix4f m_WVPtransformation;
+    Matrix4f m_transformation;
     Matrix4f m_WorldTransformation;
 };
-
-
-#endif	/* PIPELINE_H */

@@ -27,6 +27,9 @@ void main()                                                                     
     WorldPos0   = (gWorld * vec4(Position, 1.0)).xyz;                               \n\
 }";
 
+// фрагментный шейдер
+// определяет конкретный цвет пикселя FragColor (в зависимости от текстуры
+// и освещения
 static const char* pFS = "                                                          \n\
 #version 330                                                                        \n\
                                                                                     \n\
@@ -38,7 +41,7 @@ in vec3 Normal0;                                                                
 in vec3 WorldPos0;                                                                  \n\
                                                                                     \n\
 out vec4 FragColor;                                                                 \n\
-                                                                                    \n\
+    // структуры, описывающие свет (аналогично программе)                            \n\
 struct BaseLight                                                                    \n\
 {                                                                                   \n\
     vec3 Color;                                                                     \n\
@@ -61,7 +64,7 @@ struct Attenuation                                                              
                                                                                     \n\
 struct PointLight                                                                           \n\
 {                                                                                           \n\
-     BaseLight Base;                                                                  \n\
+    BaseLight Base;                                                                  \n\
     vec3 Position;                                                                          \n\
     Attenuation Atten;                                                                      \n\
 };                                                                                          \n\
@@ -72,7 +75,7 @@ struct SpotLight                                                                
     vec3 Direction;                                                                         \n\
     float Cutoff;                                                                           \n\
 };                                                                                          \n\
-                                                                                            \n\
+// юниформ переменные в шейдере                                                             \n\
 uniform int gNumPointLights;                                                                \n\
 uniform int gNumSpotLights;                                                                 \n\
 uniform DirectionalLight gDirectionalLight;                                                 \n\
@@ -82,7 +85,7 @@ uniform sampler2D gSampler;                                                     
 uniform vec3 gEyeWorldPos;                                                                  \n\
 uniform float gMatSpecularIntensity;                                                        \n\
 uniform float gSpecularPower;                                                               \n\
-                                                                                            \n\
+                         \n\
 vec4 CalcLightInternal( BaseLight Light, vec3 LightDirection, vec3 Normal)            \n\
 {                                                                                           \n\
     vec4 AmbientColor = vec4(Light.Color, 1.0f) * Light.AmbientIntensity;                   \n\
@@ -157,6 +160,8 @@ void main()                                                                     
 }";
 
 
+// финальный цвет - интерполированное значение текстуры + все виды освещения
+
 
 LightingTechnique::LightingTechnique()
 {
@@ -164,35 +169,49 @@ LightingTechnique::LightingTechnique()
 
 bool LightingTechnique::Init()
 {
-    if (!Technique::Init()) {
+    if (!Technique::Init())
+    {
         return false;
     }
 
-    if (!AddShader(GL_VERTEX_SHADER, pVS)) {
+    if (!AddShader(GL_VERTEX_SHADER, pVS)) // добавление вершинного шейдера
+    {
         return false;
     }
 
-    if (!AddShader(GL_FRAGMENT_SHADER, pFS)) {
+    if (!AddShader(GL_FRAGMENT_SHADER, pFS)) // добавление фрагментного шейдера
+    {
         return false;
     }
 
-    if (!Finalize()) {
+    if (!Finalize())
+    {
         return false;
     }
 
-    m_WVPLocation = GetUniformLocation("gWVP");
-    m_WorldMatrixLocation = GetUniformLocation("gWorld");
-    m_samplerLocation = GetUniformLocation("gSampler");
-    m_eyeWorldPosLocation = GetUniformLocation("gEyeWorldPos");
+    m_WVPLocation = GetUniformLocation("gWVP"); // получение локации юниформ переменной матрицы трансформации
+
+    m_WorldMatrixLocation = GetUniformLocation("gWorld"); // uniform переменная матрицы нормали
+
+    m_samplerLocation = GetUniformLocation("gSampler"); // получение локации семплера uniform переменной
+
+    // uniform переменные фонового света (цвет и интенсивность)
     m_dirLightLocation.Color = GetUniformLocation("gDirectionalLight.Base.Color");
     m_dirLightLocation.AmbientIntensity = GetUniformLocation("gDirectionalLight.Base.AmbientIntensity");
+    
+    // uniform переменные диффузного света (цвет и интенсивность)
     m_dirLightLocation.Direction = GetUniformLocation("gDirectionalLight.Direction");
     m_dirLightLocation.DiffuseIntensity = GetUniformLocation("gDirectionalLight.Base.DiffuseIntensity");
+    // юниформ переменные зеркального света (бликов) 
+    m_eyeWorldPosLocation = GetUniformLocation("gEyeWorldPos");
     m_matSpecularIntensityLocation = GetUniformLocation("gMatSpecularIntensity");
     m_matSpecularPowerLocation = GetUniformLocation("gSpecularPower");
+
+    // юниформ переменные количества источников света
     m_numPointLightsLocation = GetUniformLocation("gNumPointLights");
     m_numSpotLightsLocation = GetUniformLocation("gNumSpotLights");
 
+    // если хотя бы одну переменную не удалось получить
     if (m_dirLightLocation.AmbientIntensity == INVALID_UNIFORM_LOCATION ||
         m_WVPLocation == INVALID_UNIFORM_LOCATION ||
         m_WorldMatrixLocation == INVALID_UNIFORM_LOCATION ||
@@ -207,8 +226,9 @@ bool LightingTechnique::Init()
         m_numSpotLightsLocation == INVALID_UNIFORM_LOCATION) {
         return false;
     }
-
-    for (unsigned int i = 0; i < ARRAY_SIZE_IN_ELEMENTS(m_pointLightsLocation); i++) {
+    // получение местонахождения юниформ переменных массива структур точечного источника света
+    for (unsigned int i = 0; i < ARRAY_SIZE_IN_ELEMENTS(m_pointLightsLocation); i++)
+    {
         char Name[128];
         memset(Name, 0, sizeof(Name));
         snprintf(Name, sizeof(Name), "gPointLights[%d].Base.Color", i);
@@ -242,8 +262,9 @@ bool LightingTechnique::Init()
             return false;
         }
     }
-
-    for (unsigned int i = 0; i < ARRAY_SIZE_IN_ELEMENTS(m_spotLightsLocation); i++) {
+    // аналогично для прожекторов
+    for (unsigned int i = 0; i < ARRAY_SIZE_IN_ELEMENTS(m_spotLightsLocation); i++) 
+    {
         char Name[128];
         memset(Name, 0, sizeof(Name));
         snprintf(Name, sizeof(Name), "gSpotLights[%d].Base.Base.Color", i);
@@ -288,7 +309,7 @@ bool LightingTechnique::Init()
 
     return true;
 }
-
+// // передаем в юниформ переменную матрицу трансформации
 void LightingTechnique::SetWVP(const Matrix4f& WVP)
 {
     glUniformMatrix4fv(m_WVPLocation, 1, GL_TRUE, (const GLfloat*)WVP.m);
@@ -300,13 +321,14 @@ void LightingTechnique::SetWorldMatrix(const Matrix4f& WorldInverse)
     glUniformMatrix4fv(m_WorldMatrixLocation, 1, GL_TRUE, (const GLfloat*)WorldInverse.m);
 }
 
-
+// устанавливаем индексы модулей текстуры,
+// который мы собираемся использовать внутри сэмплера uniform-переменной в шейдере
 void LightingTechnique::SetTextureUnit(unsigned int TextureUnit)
 {
     glUniform1i(m_samplerLocation, TextureUnit);
 }
 
-
+// передача соответствующих векторов цветов и значений интенсивности света в юниформ переменные
 void LightingTechnique::SetDirectionalLight(const DirectionalLight& Light)
 {
     glUniform3f(m_dirLightLocation.Color, Light.Color.x, Light.Color.y, Light.Color.z);
@@ -322,21 +344,23 @@ void LightingTechnique::SetEyeWorldPos(const Vector3f& EyeWorldPos)
     glUniform3f(m_eyeWorldPosLocation, EyeWorldPos.x, EyeWorldPos.y, EyeWorldPos.z);
 }
 
+// передача интенсивности отражения света в юниформ переменную (для зеркального)
 void LightingTechnique::SetMatSpecularIntensity(float Intensity)
 {
     glUniform1f(m_matSpecularIntensityLocation, Intensity);
 }
-
+// передача коэффициента отражения (зависит от материала) света в юниформ переменную
 void LightingTechnique::SetMatSpecularPower(float Power)
 {
     glUniform1f(m_matSpecularPowerLocation, Power);
 }
-
+// передача в юниформ переменные соответсвующих параметров для точечных источников света
 void LightingTechnique::SetPointLights(unsigned int NumLights, const PointLight* pLights)
 {
     glUniform1i(m_numPointLightsLocation, NumLights);
 
-    for (unsigned int i = 0; i < NumLights; i++) {
+    for (unsigned int i = 0; i < NumLights; i++)
+    {
         glUniform3f(m_pointLightsLocation[i].Color, pLights[i].Color.x, pLights[i].Color.y, pLights[i].Color.z);
         glUniform1f(m_pointLightsLocation[i].AmbientIntensity, pLights[i].AmbientIntensity);
         glUniform1f(m_pointLightsLocation[i].DiffuseIntensity, pLights[i].DiffuseIntensity);
@@ -346,12 +370,13 @@ void LightingTechnique::SetPointLights(unsigned int NumLights, const PointLight*
         glUniform1f(m_pointLightsLocation[i].Atten.Exp, pLights[i].Attenuation.Exp);
     }
 }
-
+// аналогично для прожекторов
 void LightingTechnique::SetSpotLights(unsigned int NumLights, const SpotLight* pLights)
 {
     glUniform1i(m_numSpotLightsLocation, NumLights);
 
-    for (unsigned int i = 0; i < NumLights; i++) {
+    for (unsigned int i = 0; i < NumLights; i++)
+    {
         glUniform3f(m_spotLightsLocation[i].Color, pLights[i].Color.x, pLights[i].Color.y, pLights[i].Color.z);
         glUniform1f(m_spotLightsLocation[i].AmbientIntensity, pLights[i].AmbientIntensity);
         glUniform1f(m_spotLightsLocation[i].DiffuseIntensity, pLights[i].DiffuseIntensity);
