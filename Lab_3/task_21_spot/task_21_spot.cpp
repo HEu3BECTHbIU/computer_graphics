@@ -98,15 +98,15 @@ public:
         m_scale += 0.01f;
         // массив, содержаций 2 прожектора
         SpotLight sl[2];
-        sl[0].DiffuseIntensity = 15.0f; // интенсивность
-        sl[0].Color = Vector3f(1.0f, 1.0f, 0.7f); // цвет
+        sl[0].DiffuseIntensity = 25.0f; // интенсивность
+        sl[0].Color = Vector3f(1.0f, 0.0f, 0.0f); // цвет
         sl[0].Position = Vector3f(-0.0f, -1.9f, -0.0f); // начальное положение
         sl[0].Direction = Vector3f(sinf(m_scale / 10), 0.0f, cosf(m_scale / 10)); // направление
         sl[0].Attenuation.Linear = 0.1f; //  коэфф затухания
-        sl[0].Cutoff = 20.0f; // радиус затухания
+        sl[0].Cutoff = 25.0f; // радиус затухания
 
         // прожектор, исходящий из камеры
-        sl[1].DiffuseIntensity = 25.0f;
+        sl[1].DiffuseIntensity = 10.0f;
         sl[1].Color = Vector3f(1.0f, 1.0f, 1.0f);
         sl[1].Position = m_pGameCamera->GetPos();
         sl[1].Direction = m_pGameCamera->GetTarget();

@@ -39,7 +39,7 @@ public:
         m_directionalLight.Color = Vector3f(1.0f, 1.0f, 1.0f);
         m_directionalLight.AmbientIntensity = 0.5f;
         m_directionalLight.DiffuseIntensity = 0.75f;
-        m_directionalLight.Direction = Vector3f(1.0f, 0.0, 1.0);
+        m_directionalLight.Direction = Vector3f(1.0f, 0.0f, 1.0f);
     }
 
     ~Main()
@@ -53,22 +53,20 @@ public:
     {
         m_pGameCamera = new Camera(WINDOW_WIDTH / 1.25, WINDOW_HEIGHT / 1.25); // инициализация камеры 
 
-        /* unsigned int indexes[] = { 0, 3, 1,
-                                    1, 3, 2,
-                                    2, 3, 0,
-                                    1, 2, 0 };
-         */
+         unsigned int indexes[] = { 0, 2, 1,
+                                   0, 3, 2};
+         /*
         unsigned int indexes[] = { 0, 3, 5, 4,
                               4, 5, 6, 7,
                              6, 5, 3, 2,
                               4, 7, 1, 0,
                               1, 7, 6, 2,
-                             1, 2, 3, 0 };
+                             1, 2, 3, 0 };*/
 
         // индексный массив (4 вершины формируют одну грань куба)
         CreateIndexBuffer(indexes, sizeof(indexes)); // создание индексного массива
 
-        CreateVertexBuffer(indexes, 24); // создание массива вершин
+        CreateVertexBuffer(indexes, 6); // создание массива вершин
 
         m_pEffect = new LightingTechnique(); // инициализация светового эффекта
 
@@ -80,7 +78,7 @@ public:
 
         m_pEffect->SetTextureUnit(1); // передача в шейдер модуля текстуры (1)
 
-        m_pTexture = new Texture(GL_TEXTURE_2D, "cube.jpg"); // инициализация текстуры
+        m_pTexture = new Texture(GL_TEXTURE_2D, "cube3.jpg"); // инициализация текстуры
 
         if (!m_pTexture->Load()) // если не удалось
         {
@@ -120,10 +118,10 @@ public:
 
         m_scale += 0.01f;
         Pipeline p;
-        p.Rotate(0.0f, m_scale, 0.0f); // поворот объекта вокруг оси
+        p.Rotate(0.0f, 0.0f, 0.0f); // поворот объекта вокруг оси
         p.WorldPos(0.0f, 1.0f, 5.0f); // положение объекта
         p.SetCamera(m_pGameCamera->GetPos(), m_pGameCamera->GetTarget(), m_pGameCamera->GetUp()); // установка векторов камеры
-        p.SetPerspectiveProj(60.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 1.0f, 100.0f); // проекция перспективы
+        p.SetPerspectiveProj(60.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.1f, 100.0f); // проекция перспективы
         m_pEffect->SetWVP(p.GetTrans()); // передача матрицы трасформации в шейдер
         m_pEffect->SetDirectionalLight(m_directionalLight); // передача объекта структуры в шейдер
 
@@ -144,7 +142,7 @@ public:
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Indexbuf); // призязка индексного буфера
         m_pTexture->Bind(GL_TEXTURE1); // привязываем текстуру к конкретному модулю GL_TEXTURE
-        glDrawElements(GL_QUADS, 24, GL_UNSIGNED_INT, 0); // функция отрисовки элементов (прямоугольники)
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); // функция отрисовки элементов (прямоугольники)
         //glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0); // функция отрисовки элементов (прямоугольники)
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
@@ -199,12 +197,12 @@ private:
     void CalcNormals(const unsigned int* pIndices, unsigned int IndexCount,
         Vertex* pVertices, unsigned int VertexCount)
     {
-        for (unsigned int i = 0; i < IndexCount; i += 4)
+        for (unsigned int i = 0; i < IndexCount; i += 3)
         {
             unsigned int Index0 = pIndices[i];
             unsigned int Index1 = pIndices[i + 1];
             unsigned int Index2 = pIndices[i + 2];
-            unsigned int Index3 = pIndices[i + 3];
+           // unsigned int Index3 = pIndices[i + 3];
             Vector3f v1 = pVertices[Index1].m_pos - pVertices[Index0].m_pos;
             Vector3f v2 = pVertices[Index2].m_pos - pVertices[Index0].m_pos;
             Vector3f Normal = v1.Cross(v2);
@@ -213,7 +211,7 @@ private:
             pVertices[Index0].m_normal += Normal;
             pVertices[Index1].m_normal += Normal;
             pVertices[Index2].m_normal += Normal;
-            pVertices[Index3].m_normal += Normal;
+           // pVertices[Index3].m_normal += Normal;
         }
 
         for (unsigned int i = 0; i < VertexCount; i++)
@@ -224,6 +222,7 @@ private:
     }
     void CreateVertexBuffer(const unsigned int* pIndices, unsigned int IndexCount) // вершинный буфер
     {
+        /*
         Vertex vertices[8];
         vertices[0] = Vertex(Vector3f(-1.0f, 1.0f, -1.0f), Vector2f(0.0f, 0.0f)); // 0 0
         vertices[1] = Vertex(Vector3f(-1.0f, -1.0f, -1.0f), Vector2f(0.0f, 1.0f)); // 0 0
@@ -233,13 +232,13 @@ private:
         vertices[5] = Vertex(Vector3f(1.0f, 1.0f, 1.0f), Vector2f(0.0f, 1.0f)); // 0 1
         vertices[6] = Vertex(Vector3f(1.0f, -1.0f, 1.0f), Vector2f(0.0f, 0.0f)); // 0 0
         vertices[7] = Vertex(Vector3f(-1.0f, -1.0f, 1.0f), Vector2f(1.0f, 1.0f)); // 1 1
-        /*
-                unsigned int VertexCount = 8;
-                Vertex vertices[4] = { Vertex(Vector3f(-1.0f, -1.0f, 0.5773f), Vector2f(0.0f, 0.0f)),
-                                       Vertex(Vector3f(0.0f, -1.0f, -1.15475), Vector2f(0.5f, 0.0f)),
-                                       Vertex(Vector3f(1.0f, -1.0f, 0.5773f),  Vector2f(1.0f, 0.0f)),
-                                       Vertex(Vector3f(0.0f, 1.0f, 0.0f),      Vector2f(0.5f, 1.0f)) };*/
-        unsigned int VertexCount = 8;
+        */
+                unsigned int VertexCount = 4;
+                Vertex vertices[4] = { Vertex(Vector3f(-20.0f, -2.0f, -20.0f), Vector2f(0.0f, 0.0f)),
+                               Vertex(Vector3f(20.0f, -2.0f, -20.0f), Vector2f(1.0f, 0.0f)),
+                               Vertex(Vector3f(20.0f, -2.0f, 20.0f), Vector2f(1.0f, 1.0f)),
+                               Vertex(Vector3f(-20.0f, -2.0f, 20.0f), Vector2f(0.0f, 1.0f))};
+       // unsigned int VertexCount = 8;
         CalcNormals(pIndices, IndexCount, vertices, VertexCount);
         glGenBuffers(1, &m_VBO);
         glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
@@ -266,7 +265,7 @@ int main(int argc, char** argv)
 {
     GLUTBackendInit(argc, argv); // инициализация glut
 
-    if (!GLUTBackendCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, 60, true, "Task 19"))
+    if (!GLUTBackendCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, 60, true, "Task 20"))
     {
         return 1;
     }

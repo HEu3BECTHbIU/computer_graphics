@@ -101,7 +101,7 @@ public:
 
         m_scale += 0.01f;
         Pipeline p;
-        p.Rotate(0.0f, 0.0f, 0.0f); // поворот объекта вокруг оси
+        p.Rotate(0.0f, m_scale, 0.0f); // поворот объекта вокруг оси
         p.WorldPos(0.0f, 1.0f, 5.0f); // положение объекта
         p.SetCamera(m_pGameCamera->GetPos(), m_pGameCamera->GetTarget(), m_pGameCamera->GetUp()); // установка векторов камеры
         p.SetPerspectiveProj(60.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 1.0f, 100.0f); // проекция перспективы

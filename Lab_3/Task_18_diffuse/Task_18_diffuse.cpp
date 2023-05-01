@@ -39,7 +39,7 @@ public:
         m_directionalLight.Color = Vector3f(1.0f, 1.0f, 1.0f);
         m_directionalLight.AmbientIntensity = 0.5f;
         m_directionalLight.DiffuseIntensity = 0.75f;
-        m_directionalLight.Direction = Vector3f(1.0f, 0.0, 0.0);
+        m_directionalLight.Direction = Vector3f(1.0f, 0.0f, 0.0f);
     }
 
     ~Main()
